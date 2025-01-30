@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 export default function F1Button({ text = "WELCOME", suffix = "F1", onClick }) {
   return (
     <motion.button
-      className="font-orbitron italic font-extrabold group flex items-center bg-transparent hover:bg-transparent transition-colors relative"
+      className="font-orbitron overflow-hidden italic font-extrabold group flex items-center bg-transparent hover:bg-transparent transition-colors relative"
       onClick={onClick}
       whileHover={{ scale: 1.01 }}
       whileTap={{ scale: 0.97 }}

@@ -5,6 +5,8 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import F1Button from "./components/f1-button";
+import SplitText from "./components/SplitText";
+import ScrollFillText from "./components/ScrollFillText";
 
 export default function Home() {
   const bgImageRef = useRef(null);
@@ -48,17 +50,15 @@ export default function Home() {
       span.style.transform = "translateY(20px)";
       return span;
     });
-
-    const subtitleLetters = subtitleRef.current.innerText
-      .split("")
-      .map((char) => {
-        const span = document.createElement("span");
-        span.textContent = char;
-        span.style.opacity = "0";
-        span.style.display = "inline-block";
-        span.style.transform = "translateY(20px)";
-        return span;
-      });
+    if (!subtitleRef.current) return;
+    const subtitleLetters = subtitleRef.current.split("").map((char) => {
+      const span = document.createElement("span");
+      span.textContent = char;
+      span.style.opacity = "0";
+      span.style.display = "inline-block";
+      span.style.transform = "translateY(20px)";
+      return span;
+    });
 
     // Clear and append new spans
     titleRef.current.textContent = "";
@@ -129,12 +129,16 @@ export default function Home() {
             <div className="mb-4">
               <F1Button />
             </div>
-            <h2
-              ref={subtitleRef}
+            <SplitText
+              text="A Fusion of Elegance & Innovation"
               className="font-light mb-3 font-montserrat text-black text-[45px]"
-            >
-              A Fusion of Elegance & Innovation
-            </h2>
+              delay={80}
+              animationFrom={{ opacity: 0, transform: "translate3d(0,50px,0)" }}
+              animationTo={{ opacity: 1, transform: "translate3d(0,0,0)" }}
+              easing="easeOutCubic"
+              threshold={0.2}
+              rootMargin="-50px"
+            />
 
             {/* Description */}
             <p
@@ -152,7 +156,7 @@ export default function Home() {
       </section>
 
       {/* Second Section - Split Screen */}
-      <section className="relative w-full h-screen grid grid-cols-2">
+      <section className="relative w-full min-h-screen grid grid-cols-2">
         {/* Left Side - Image */}
         <div className="relative h-full">
           <Image
@@ -164,17 +168,12 @@ export default function Home() {
         </div>
 
         {/* Right Side - Content */}
-        <div className="flex flex-col justify-center px-16 bg-white">
-          <F1Button />
-          <h3 className="text-4xl font-semibold font-montserrat text-black mb-6">
-            Crafted for Excellence
+        <div className="flex flex-col justify-center px-16 py-24 bg-white">
+          <F1Button text="Details" suffix="F2" />
+          <h3 className="text-4xl font-semibold font-montserrat text-black mt-8 mb-6">
+            Where Innovation Meets Artistry
           </h3>
-          <p className="text-sm leading-relaxed font-montserrat text-[#6D6D6D] max-w-md">
-            Experience the perfect blend of style and comfort with our latest
-            collection. Each pair is meticulously crafted to deliver
-            unparalleled performance and sophisticated aesthetics. Step into the
-            future of footwear with EGEON.
-          </p>
+          <ScrollFillText text="The Egeon is more than just footwear – it's a celebration of modern design and artisanal craftsmanship. Inspired by the dynamic interplay of urban culture and high fashion, the Egeon bridges the gap between bold aesthetics and everyday practicality. From the moment you step into the Egeon, you'll experience a perfect harmony of comfort, durability, and timeless style." />
         </div>
       </section>
     </div>

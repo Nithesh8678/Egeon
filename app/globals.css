@@ -45,6 +45,14 @@
   }
 }
 
+/* Word animation styles */
+.word {
+  display: inline-block;
+  color: #d1d1d1;
+  transition: color 0.3s ease;
+  will-change: color;
+}
+
 :root {
   --scroll-behavior: smooth !important;
   scroll-behavior: smooth !important;
