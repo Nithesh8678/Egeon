@@ -7,7 +7,7 @@
 @font-face {
   font-family: "Orbitron";
   src: url("/fonts/Montserrat,Orbitron/Orbitron/Orbitron-VariableFont_wght.ttf")
-    format("woff2");
+    format("ttf");
   font-weight: 800;
   font-style: normal;
   font-display: swap;
@@ -16,7 +16,7 @@
 @font-face {
   font-family: "Montserrat";
   src: url("/fonts/Montserrat,Orbitron/Montserrat/Montserrat-VariableFont_wght.ttf")
-    format("woff2");
+    format("ttf");
   font-weight: 300;
   font-style: normal;
   font-display: swap;
@@ -27,6 +27,43 @@
     scroll-behavior: smooth;
     font-family: Montserrat, system-ui, sans-serif;
   }
+}
+
+@layer utilities {
+  .animate-reveal {
+    animation: reveal 0.8s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+    animation-delay: var(--delay, 0);
+  }
+}
+
+@keyframes reveal {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+:root {
+  --scroll-behavior: smooth !important;
+  scroll-behavior: smooth !important;
+}
+
+html.lenis {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
 }
 
 body {
