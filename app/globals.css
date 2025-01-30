@@ -1,21 +1,44 @@
+/* globals.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* Font imports */
+@font-face {
+  font-family: "Orbitron";
+  src: url("/fonts/Montserrat,Orbitron/Orbitron/Orbitron-VariableFont_wght.ttf")
+    format("woff2");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@font-face {
+  font-family: "Montserrat";
+  src: url("/fonts/Montserrat,Orbitron/Montserrat/Montserrat-VariableFont_wght.ttf")
+    format("woff2");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    font-family: Montserrat, system-ui, sans-serif;
   }
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+/* Smooth text rendering */
+* {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }

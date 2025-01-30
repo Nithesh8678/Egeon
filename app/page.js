@@ -1,101 +1,133 @@
+"use client";
+
+import { useEffect, useRef } from "react";
+import { gsap } from "gsap";
 import Image from "next/image";
+import F1Button from "./components/f1-button";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.js
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const bgImageRef = useRef(null);
+  const titleRef = useRef(null);
+  const subtitleRef = useRef(null);
+  const descriptionRef = useRef(null);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  useEffect(() => {
+    // Background image animation
+    gsap.set(bgImageRef.current, {
+      scale: 1.1,
+    });
+
+    gsap.to(bgImageRef.current, {
+      scale: 1,
+      duration: 1.5,
+      ease: "power2.out",
+    });
+
+    // Create arrays of span elements for title and subtitle
+    const titleLetters = titleRef.current.innerText.split("").map((char) => {
+      const span = document.createElement("span");
+      span.textContent = char;
+      span.style.opacity = "0";
+      span.style.display = "inline-block";
+      span.style.transform = "translateY(20px)";
+      return span;
+    });
+
+    const subtitleLetters = subtitleRef.current.innerText
+      .split("")
+      .map((char) => {
+        const span = document.createElement("span");
+        span.textContent = char;
+        span.style.opacity = "0";
+        span.style.display = "inline-block";
+        span.style.transform = "translateY(20px)";
+        return span;
+      });
+
+    // Clear and append new spans
+    titleRef.current.textContent = "";
+    subtitleRef.current.textContent = "";
+    titleLetters.forEach((span) => titleRef.current.appendChild(span));
+    subtitleLetters.forEach((span) => subtitleRef.current.appendChild(span));
+
+    // Animate title letters
+    gsap.to(titleLetters, {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      stagger: 0.05,
+      ease: "power4.out",
+      delay: 0.5,
+    });
+
+    // Animate subtitle letters
+    gsap.to(subtitleLetters, {
+      opacity: 1,
+      y: 0,
+      duration: 0.6,
+      stagger: 0.02,
+      ease: "power3.out",
+      delay: 1.2,
+    });
+
+    // Description animation
+    gsap.from(descriptionRef.current, {
+      opacity: 0,
+      y: 50,
+      duration: 1,
+      ease: "power3.out",
+      delay: 2,
+    });
+  }, []);
+
+  return (
+    <main className="relative w-full h-screen overflow-hidden">
+      <div ref={bgImageRef} className="absolute inset-0">
+        <Image
+          src="/homebg.jpg"
+          alt="Background"
+          fill
+          priority
+          className="object-cover"
+          quality={100}
+        />
+      </div>
+
+      {/* Content Container */}
+      <div className="relative z-10 w-full h-full flex flex-col px-12 text-white">
+        {/* Brand Name */}
+        <h1
+          ref={titleRef}
+          className="mt-4 text-3xl italic font-extra bold text-black tracking-wider font-orbitron"
+        >
+          EGEON
+        </h1>
+
+        {/* Tagline */}
+        <div className="mt-auto mb-52">
+          <div className="mb-4">
+            <F1Button />
+          </div>
+          <h2
+            ref={subtitleRef}
+            className="text-4xl mb-6 font-semibold font-montserrat text-black text-[45px]"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            A Fusion of Elegance & Innovation
+          </h2>
+
+          {/* Description */}
+          <p
+            ref={descriptionRef}
+            className="w-[450px] text-sm leading-relaxed font-bold font-montserrat text-[#6D6D6D]"
           >
-            Read our docs
-          </a>
+            The Egeon sneaker represents the pinnacle of modern craftsmanship.
+            Combining lightweight synthetic materials with a durable rubber
+            sole, the Egeon redefines comfort, style, and quality. Designed for
+            those who demand the best, this handmade sneaker seamlessly blends
+            performance with luxury.
+          </p>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      </div>
+    </main>
   );
 }
