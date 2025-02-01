@@ -13,7 +13,7 @@ export default function ScrollHighlight() {
   useEffect(() => {
     const handleScroll = () => {
       let scrollFraction = getScrollFraction();
-      let wordsHighlighted = Math.floor((scrollFraction * words.length) / 1.5);
+      let wordsHighlighted = Math.floor(scrollFraction * words.length * 1.1);
       setHighlightedCount(wordsHighlighted);
     };
 

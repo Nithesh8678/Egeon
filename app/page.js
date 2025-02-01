@@ -7,6 +7,8 @@ import Image from "next/image";
 import F1Button from "./components/f1-button";
 import SplitText from "./components/SplitText";
 import ScrollFillText from "./components/ScrollFillText";
+import SpecificationsGrid from "./components/SpecificationsGrid";
+import ScrollSequence from "./components/ScrollSequence";
 
 export default function Home() {
   const bgImageRef = useRef(null);
@@ -136,9 +138,11 @@ export default function Home() {
             src="/homebg.jpg"
             alt="Background"
             fill
-            priority
+            sizes="100vw"
+            priority={true}
             className="object-cover"
             quality={100}
+            loading="eager"
           />
         </div>
 
@@ -196,19 +200,25 @@ export default function Home() {
             src="/homebg.jpg"
             alt="Product Image"
             fill
+            sizes="50vw"
             className="object-cover"
+            loading="lazy"
           />
         </div>
 
-        {/* Right Side - Content */}
+        {/* Right Half - Content */}
         <div className="flex flex-col justify-center px-16 py-24 bg-white">
           <F1Button text="Details" suffix="F2" />
           <h3 className="text-4xl font-semibold font-montserrat text-[#9B887E] italic mt-8 mb-6">
             Where Innovation Meets Artistry
           </h3>
           <ScrollFillText text="The Egeon is more than just footwear – it's a celebration of modern design and artisanal craftsmanship. Inspired by the dynamic interplay of urban culture and high fashion, the Egeon bridges the gap between bold aesthetics and everyday practicality. From the moment you step into the Egeon, you'll experience a perfect harmony of comfort, durability, and timeless style." />
+          <SpecificationsGrid />
         </div>
       </section>
+
+      {/* Scroll Sequence Section */}
+      <ScrollSequence />
     </div>
   );
 }
