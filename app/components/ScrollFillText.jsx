@@ -1,60 +1,41 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useEffect, useState } from "react";
 
-export default function ScrollFillText({ text }) {
-  const textRef = useRef(null);
-  const containerRef = useRef(null);
+export default function ScrollHighlight() {
+  const HIGHLIGHT_CLASS = "text-[#313130]"; // Tailwind class for red highlight
+  const TEXT =
+    "The Egeon is more than just footwear – it's a celebration of modern design and artisanal craftsmanship. Inspired by the dynamic interplay of urban culture and high fashion, the Egeon bridges the gap between bold aesthetics and everyday practicality. From the moment you step into the Egeon, you'll experience a perfect harmony of comfort, durability, and timeless style.";
+
+  const words = TEXT.split(" ");
+  const [highlightedCount, setHighlightedCount] = useState(0);
 
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
+    const handleScroll = () => {
+      let scrollFraction = getScrollFraction();
+      let wordsHighlighted = Math.floor((scrollFraction * words.length) / 1.5);
+      setHighlightedCount(wordsHighlighted);
+    };
 
-    // Split text into words
-    const words = text.split(" ");
-    if (textRef.current) {
-      textRef.current.innerHTML = words
-        .map((word) => `<span class="word">${word}</span>`)
-        .join(" ");
-    }
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
-    // Get all word spans
-    const wordSpans = textRef.current.querySelectorAll(".word");
-    const totalWords = wordSpans.length;
-
-    // Create scroll-based animation
-    ScrollTrigger.create({
-      trigger: containerRef.current,
-      start: "top center",
-      end: "bottom center",
-      scrub: 1,
-      onUpdate: (self) => {
-        const progress = self.progress;
-        const wordsToHighlight = Math.floor(progress * totalWords);
-
-        wordSpans.forEach((word, index) => {
-          if (index <= wordsToHighlight) {
-            word.style.color = "#6D6D6D";
-            word.style.transition = "color 0.3s ease";
-          } else {
-            word.style.color = "#D1D1D1";
-            word.style.transition = "color 0.3s ease";
-          }
-        });
-      },
-    });
-  }, [text]);
+  function getScrollFraction() {
+    const h = document.documentElement;
+    const b = document.body;
+    const st = "scrollTop";
+    const sh = "scrollHeight";
+    return (h[st] || b[st]) / ((h[sh] || b[sh]) - h.clientHeight);
+  }
 
   return (
-    <div ref={containerRef} className="min-h-[50vh]">
-      <p
-        ref={textRef}
-        className="text-sm leading-relaxed font-montserrat max-w-md"
-        style={{ wordSpacing: "0.25em" }}
-      >
-        {text}
-      </p>
+    <div className="text-[#D0D1D1] leading-relaxed font-montserrat max-w-md text-2xl">
+      {words.map((word, i) => (
+        <span key={i} className={i < highlightedCount ? HIGHLIGHT_CLASS : ""}>
+          {word}{" "}
+        </span>
+      ))}
     </div>
   );
 }
