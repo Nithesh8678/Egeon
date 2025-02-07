@@ -11,7 +11,6 @@ export default function ScrollSequence() {
   const [currentFrame, setCurrentFrame] = useState(1);
   const containerRef = useRef(null);
   const imagesRef = useRef([]);
-  const prevFrameRef = useRef(1);
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -22,17 +21,10 @@ export default function ScrollSequence() {
       start: "top top",
       end: "+=300%",
       pin: true,
-      scrub: 0.5, // Reduced scrub time for smoother transitions
+      scrub: 1,
       onUpdate: (self) => {
-        const newFrame = Math.min(
-          Math.max(1, Math.floor(self.progress * (TOTAL_FRAMES - 1)) + 1),
-          TOTAL_FRAMES
-        );
-
-        if (newFrame !== prevFrameRef.current) {
-          setCurrentFrame(newFrame);
-          prevFrameRef.current = newFrame;
-        }
+        const frame = Math.floor(self.progress * (TOTAL_FRAMES - 1)) + 1;
+        setCurrentFrame(frame);
       },
     });
 
@@ -44,39 +36,28 @@ export default function ScrollSequence() {
   // Generate array of frame numbers
   const frames = Array.from({ length: TOTAL_FRAMES }, (_, i) => i + 1);
 
-  // Only render current frame and adjacent frames for performance
-  const visibleFrames = frames.filter(
-    (frame) => Math.abs(frame - currentFrame) <= 2
-  );
-
   return (
     <section
       ref={containerRef}
-      className="relative w-full h-screen flex items-center justify-center bg-black overflow-hidden will-change-transform"
+      className="relative w-full h-screen flex items-center justify-center bg-black overflow-hidden"
     >
       {/* Container for all images */}
       <div className="relative w-full h-full">
-        {visibleFrames.map((frame) => (
+        {frames.map((frame) => (
           <div
             key={frame}
-            className="absolute inset-0 w-full h-full"
-            style={{
-              opacity: currentFrame === frame ? 1 : 0,
-              transition: "opacity 0.1s ease-out",
-              willChange: "opacity",
-              pointerEvents: "none",
-            }}
+            className="absolute inset-0 w-full h-full transition-opacity duration-200"
+            style={{ opacity: currentFrame === frame ? 1 : 0 }}
           >
             <Image
               ref={(el) => (imagesRef.current[frame - 1] = el)}
-              src={`/mulclip/shoe${frame}.jpeg`}
+              src={`/mulclip/shoe${frame.toString().padStart("0")}.jpeg`}
               alt={`Frame ${frame}`}
               fill
-              priority={frame <= 5}
-              className="object-contain select-none"
+              priority={frame <= 5} // Prioritize loading first 5 frames
+              className="object-contain"
               quality={100}
               sizes="100vw"
-              unoptimized={true} // Bypass Next.js image optimization for smoother transitions
             />
           </div>
         ))}
